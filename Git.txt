@@ -1,0 +1,23 @@
+cd C:\Users\xuyang\learngit
+
+cd C:/Users/xuyang/learngit
+
+合并远程的分支
+git pull remotename master:dev
+
+方法一
+如果blah分支能够快速merge到master分支，那么采用这个方法
+git checkout seotweaks
+git merge -s ours master
+git checkout master
+git merge seotweaks
+
+回到顶部
+方法二
+如果分支合并时出现了冲突，而你的remote仓库是github或者bitbucket，那么只能强上了
+git branch -m master old-master
+git branch -m seotweaks master
+git push -f origin master
+
+Git 命令
+$ git    看看系统有没有安装Git
