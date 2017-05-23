@@ -1,0 +1,311 @@
+
+<html>
+<head>
+<meta charset="utf-8">
+<title>无标题文档</title>
+</head>
+     <div id="playerWrap">
+                <div id="id_video_container_9031868222927164533" style="width:800px;height:450px;"></div>
+                <audio id="trueMusic" class="music" preload src="true.mp3"></audio>
+                <audio id="falseMusic" class="music" preload src="false.mp3"></audio>
+    </div>
+<script type="text/javascript" src="http://static.zhiziyun.com/js/ads/jquery-1.7.1.js"></script>   
+<script src="https://qzonestyle.gtimg.cn/open/qcloud/video/h5/h5connect.js" charset="utf-8"></script>    
+<script type="text/javascript">    //json
+var json={
+	"id":"9031868222927164533",
+	"name":"我的视频",
+	"duration":600000,
+	"track":[
+		{
+			"time":25.2,
+			"choice":[
+					{
+						"title":"A",     
+						"check":true        
+					},
+					{
+						"title":"B",     
+						"check":false        
+					},
+					{
+						"title":"C",     
+						"check":false        
+					},
+                    {
+						"title":"D",     
+						"check":false        
+					}
+				]
+		},
+		{
+			"time":29.5,
+			"choice":[
+					{
+						"title":"A",     
+						"check":false        
+					},
+					{
+						"title":"B",    
+						"check":false       
+					},
+					{
+						"title":"C",    
+						"check":true     
+					},
+                    {
+						"title":"D",     
+						"check":false        
+					}
+				]
+       },
+		
+	]
+			};
+        </script>
+        
+    
+    
+<script type="text/javascript">
+            //“auto_play”: “0”,（是否自动播放 默认值0 (0: 不自动，1: 自动播放)）
+			//视频 ID (必选参数)
+			//app_id应用 ID (必选参数)，同一个账户下的视频，该参数是相同的
+			//width播放器宽度，单位像素
+			//height播放器高度，单位像素
+			//“disable_full_screen”: 0,屏蔽全屏播放标识,默认值0 (0: 支持全屏播放,1: 禁用全屏播放)
+			
+               var option ={"auto_play":"0","file_id":"9031868222927164533","app_id":"1253697430","width":800,"height":450,"https":1,"disable_full_screen":1};
+               var listener = {
+                   playStatus: function (status){
+				   //status 可为 {ready: “播放器已准备就绪”,seeking:”搜索”,suspended:”暂停”, playing:”播放中” , playEnd:”播放结束” , stop: “试看结束触发”}
+				   
+                   //TODO
+                    if(status=="playing"){                
+					//console.log("开始播放");                    
+					settime();                    
+					for(var i=0;i<trackNum;i++){                       
+						if(Math.abs(myVideo.getCurrentTime()-(json.track[i].time))>1){   
+							
+						ifDo[i]=false; }
+						
+					}                  
+                  
+				                
+				};                
+				if(status=="suspended"){                    
+					//console.log("暂停");                    
+					if(tracktime){                            
+						clearInterval(tracktime); 
+					//clearInterval() 方法可取消由 setInterval() 设置的 timeout
+					//clearInterval() 方法的参数必须是由 setInterval() 返回的 ID 值。
+						tracktime=null;                    
+					}                
+				};
+   
+                 }
+                };
+
+               /*调用播放器进行播放*/
+               var myVideo=new qcVideo.Player(
+                       /*代码中的id_video_container将会作为播放器放置的容器使用,可自行替换*/
+                       "id_video_container_9031868222927164533",
+                       option,
+                       listener
+                   );
+              
+    //getCurrentTime 获取当前播放位置
+        function printCurrentTime(){
+            console.log(myVideo.getCurrentTime());//负责打印当前时间
+        }
+             setInterval(printCurrentTime,1000);
+			//动作的作用是在播放动画的时，每隔一定时间就调用函数，方法或对象。
+			//可以使用本动作更新来自数据库的变量或更新时间显示			 
+            
+    
+            var trueMusic=document.getElementById('trueMusic');
+			var falseMusic=document.getElementById('falseMusic');
+			var index;		    
+            var tracktime;
+			var trackNum=json.track.length;
+			var ifDo=new Array();
+			
+			for(var i=0;i<trackNum;i++){
+				ifDo[i]=false;
+			}
+			
+            if(!json||!json.track||!json.track.length){
+                alert('数据加载出错!');
+            }//其中有一个为空，数据加载就会出错
+            else{
+				
+			function settime(){
+			   tracktime=setInterval("settrack()",100);
+			  
+			}
+			
+			function settrack(){ 
+				for(var i=0;i<trackNum;i++){
+			      if((myVideo.getCurrentTime()>(json.track[i].time))&&(myVideo.getCurrentTime()-(json.track[i].time)<1)){
+					  if(!ifDo[i])
+					  {
+						index=json.track[i].time;
+						ifDo[i]=true;
+                        myVideo.pause();
+						//暂停当前播放的视频 pause
+                        dosomething();
+						  //开始交互
+					  } 
+					 break;
+				  }			
+				}
+            }
+			
+            function dosomething(){
+                //做一些交互操作
+                console.log('交互开始');
+				var zhezhao=document.createElement("div");
+				zhezhao.setAttribute("class","zhezhao");
+				//<div class="zhezhao"></div>
+                var	choiceDiv=document.createElement("div");
+				choiceDiv.setAttribute("id","choiceWrap")
+				//<div id=“choiceMrap”></div>
+				
+			    var choice1=document.createElement("span");			
+				choice1.innerHTML="A";
+				choice1.setAttribute("id","choice1");
+			    choice1.setAttribute("class","choices");
+				//<span id="choice1" class="choices">A</span>
+				
+				var choice2=document.createElement("span");			
+				choice2.innerHTML="B";
+				choice2.setAttribute("id","choice2");
+			    choice2.setAttribute("class","choices");
+				//<span id="choice2" class="choices">B</span>
+				
+				var choice3=document.createElement("span");		
+				choice3.innerHTML="C";
+				choice3.setAttribute("id","choice3");
+			    choice3.setAttribute("class","choices");
+				//<span id="choice3" class="choices">B</span>
+				
+				var choice4=document.createElement("span");		
+				choice4.innerHTML="D";
+				choice4.setAttribute("id","choice4");
+			    choice4.setAttribute("class","choices");
+				//<span id="choice4" class="choices">B</span>
+				
+				var playerWrap=document.getElementById("playerWrap");
+				playerWrap.appendChild(zhezhao);
+			    playerWrap.appendChild(choiceDiv);
+				choiceDiv.appendChild(choice1);
+				choiceDiv.appendChild(choice2);
+				choiceDiv.appendChild(choice3);
+				choiceDiv.appendChild(choice4);
+				
+				var btnClicked=document.getElementsByClassName("choices");
+				
+				for(var i=0;i<btnClicked.length;i++){
+				   btnClicked[i].onclick=function(e){
+				   for(var j=0;j<trackNum;j++){
+				        if(index==json.track[j].time){
+					        for(var k=0;k<json.track[j].choice.length;k++){
+					             if(e.target.innerHTML==json.track[j].choice[k].title){
+				                      if(json.track[j].choice[k].check==true){
+										  trueMusic.play();
+									  }
+								else{
+									falseMusic.play();
+								}
+				             }
+							}	
+						}	 
+				    }
+					
+					    $("#choiceWrap").remove();
+					    $(".zhezhao").remove();
+						//恢复播放视频 resume
+                         myVideo.resume();
+					  //myVideo.play(myVideo.getCurrentTime()+1);//交互结束
+                      console.log('交互结束');
+				}
+				
+				}
+            }
+			
+            }
+             
+ </script>
+  
+
+
+    
+        
+<style>
+            *{padding:0;margin:0;font-family:'Microsoft Yahei';font-size: 14px; text-decoration: none;}
+            .container{width:1000px;margin:0 auto;position:relative;}
+            .container:after{content:'';line-height:0;display:table;clear:both;}
+            #playerWrap{float:left;position: relative;}
+			#video{
+				z-index: 1;
+			}
+			
+			#choice1{
+				margin-left:  -150px;
+			}
+			#choice2{
+				margin-left:  -60px;
+			}
+			#choice3{
+				margin-left: 30px;
+			}
+			#choice4{
+				margin-left:  120px;
+			}
+			.choices{
+	            z-index: 9999999999;
+	            position: absolute;
+	        	top:78%;
+				left:50%;
+				height:35px;
+				width:35px;
+				border-radius: 40px;
+				background-color: #9BA6AD;
+				text-align: center;
+				line-height:35px;
+			}
+			.choices:hover{
+				background-color: #f3bd6b;
+                height: 40px;
+				width: 40px;
+				border-radius: 45px;
+				line-height:40px;
+				cursor: pointer;
+			}
+ 
+			.zhezhao{
+				position: absolute;
+				top: 0;
+				left: 0;
+			    bottom: 0;
+				right:0;
+				width: 100%;
+				height:100%;
+				z-index: 9999999999;
+			    color:#000000;
+				
+			}
+			.music{
+				z-index: 9999999999;
+				top:0;
+				left:0;
+				position: absolute;
+				width: 200px;
+				height: 50px;
+			}
+</style>    
+    
+    
+<body>
+   
+</body>
+</html>
